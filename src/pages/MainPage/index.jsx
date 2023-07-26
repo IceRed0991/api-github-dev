@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+
 import {MdSearch} from 'react-icons/md';
 
 import { Container,Logo , Title , Form , Input, Button } from "./styles";
@@ -12,7 +13,7 @@ export default function MainPage() {
       <Title>API Github</Title>
       <Form>
         <Input placeholder="usuário" value={login} onChange={(event)=>setLogin(event.target.value)}/>
-        <Button>
+        <Button to={`/${login}/repositories`}>
           <MdSearch size={42} />
           </Button>
       </Form>
