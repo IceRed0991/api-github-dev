@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import Filter from "./Filter";
 
 import {Container,Sidebar,Main} from './styles';
+import Repositories from "./Repositories";
 
 
 export default function RepositoriesPage() {
@@ -15,7 +16,9 @@ export default function RepositoriesPage() {
        <Profile/>
        <Filter/>
       </Sidebar>
-      <Main>Main</Main>
+      <Main>
+        <Repositories/>
+      </Main>
     </Container>
 
 
