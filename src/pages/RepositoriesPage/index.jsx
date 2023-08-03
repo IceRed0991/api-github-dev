@@ -1,15 +1,17 @@
-import React from "react";
+import React,{useState} from "react";
 
 import Profile from "./Profile";
 import Filter from "./Filter";
+import Repositories from "./Repositories";
 
 import {Container,Sidebar,Main} from './styles';
-import Repositories from "./Repositories";
 import {getLangsForm} from "../../services/api";
 
 
 
 export default function RepositoriesPage() {
+  const [currentLanguage, setCurrentLanguage] = useState();
+
   const user={
     login:"IceRed0991",
     name:"Werner Eduard Gutschow",
@@ -23,7 +25,7 @@ export default function RepositoriesPage() {
 
   // eslint-disable-next-line no-unused-vars
   const repositories=[
-    {id:'1',name:'Repo 1', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
+    {id:"1",name:'Repo 1', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
   language: 'JavaScript'},
   {id:'2',name:'Repo 2', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
   language: 'JavaScript'},
@@ -40,15 +42,20 @@ export default function RepositoriesPage() {
   ];
 
   const languages = getLangsForm(repositories);
+
+  const onFilterClick = (language) => {
+    setCurrentLanguage(language);
+  };
+
    return (
 
     <Container>
       <Sidebar>
        <Profile user ={user}/>
-       <Filter languages={languages}/>
+       <Filter languages={languages} currentLanguage={currentLanguage} onClick={onFilterClick}/>
       </Sidebar>
       <Main>
-        <Repositories repositories={repositories}/>
+        <Repositories repositories={repositories} currentLanguage={currentLanguage} />
       </Main>
     </Container>
 
