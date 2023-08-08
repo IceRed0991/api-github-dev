@@ -1,51 +1,51 @@
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
+
+import {useParams} from 'react-router-dom';
 
 import Profile from "./Profile";
 import Filter from "./Filter";
 import Repositories from "./Repositories";
 
-import {Container,Sidebar,Main} from './styles';
-import {getLangsForm} from "../../services/api";
+import {Loading, Container,Sidebar,Main} from './styles';
+import {getUser, getRepos, getLangsForm} from "../../services/api";
 
 
 
 export default function RepositoriesPage() {
+  const {login} = useParams();
+  const [user, setUser] = useState();
+  const [repositories, setRepositories] = useState();
+  const [languages, setLanguages]= useState();
   const [currentLanguage, setCurrentLanguage] = useState();
+  const [loading, setLoading]= useState(true);
 
-  const user={
-    login:"IceRed0991",
-    name:"Werner Eduard Gutschow",
-    avatar_url: "https://avatars.githubusercontent.com/u/16406369?v=4",
-    followers:1,
-    following: 1,
-    company: 'Unimed',
-    blog: "https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/",
-    location: 'Assis -SP',
-  };
+  useEffect(()=>{
+    const loadData = async()=>{
+      const[userResponse, repositoriesResponse] = await Promise.all([
+        getUser(login),
+        getRepos(login)
+      ])
+      setUser(userResponse.data);
+      setRepositories(repositoriesResponse.data);
+      setLanguages (getLangsForm(repositoriesResponse.data));
+
+
+      setLoading(false);
+    };
+    loadData();
+  }, []);
 
   // eslint-disable-next-line no-unused-vars
-  const repositories=[
-    {id:"1",name:'Repo 1', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'JavaScript'},
-  {id:'2',name:'Repo 2', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'JavaScript'},
-  {id:'3',name:'Repo 3', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'PHP'},
-  {id:'4',name:'Repo 4', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'Ruby'},
-  {id:'5',name:'Repo 5', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'Java'},
-  {id:'6',name:'Repo 5', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'Typescript'},
-  {id:'7',name:'Repo 6', description: 'Descrição', html_url:'https://www.linkedin.com/in/werner-eduard-gutschow-72a513213/',
-  language: 'Typescript'},
-  ];
 
-  const languages = getLangsForm(repositories);
+
 
   const onFilterClick = (language) => {
     setCurrentLanguage(language);
   };
+
+  if(loading){
+    return <Loading>Carregando...</Loading>
+  }
 
    return (
 
